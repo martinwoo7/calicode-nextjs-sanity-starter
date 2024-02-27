@@ -2,11 +2,22 @@ import '~/styles/global.css'
 
 import type { AppProps } from 'next/app'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
-import { lazy } from 'react'
+import { lazy, useEffect, useState } from 'react'
+
+import Navbar from '~/components/Navbar'
+import Footer from '~/components/Footer'
+import type { Metadata } from 'next'
 
 export interface SharedPageProps {
   draftMode: boolean
   token: string
+}
+export const metadata: Metadata = {
+  title: 'Calicode Next.js Portfolio Site',
+  description: 'A personal portfolio site built with Sanity and Next.js',
+  openGraph: {
+    images: 'add-your-open-graph-image-url-here',
+  },
 }
 
 const PreviewProvider = lazy(() => import('~/components/PreviewProvider'))
@@ -35,6 +46,15 @@ export default function App({
   pageProps,
 }: AppProps<SharedPageProps>) {
   const { draftMode, token } = pageProps
+
+  const [isSanityStudio, setIsSanityStudio] = useState(false)
+
+  useEffect(() => {
+    const pathname = window.location.pathname
+    console.log('curent pathname is ', pathname)
+    setIsSanityStudio(pathname.startsWith('/studio'))
+  }, [])
+
   return (
     <>
       <style jsx global>
@@ -48,10 +68,18 @@ export default function App({
       </style>
       {draftMode ? (
         <PreviewProvider token={token}>
-          <Component {...pageProps} />
+          <div className="bg-zinc-900 text-white h-full">
+            {!isSanityStudio && <Navbar />}
+            <Component {...pageProps} />
+            {!isSanityStudio && <Footer />}
+          </div>
         </PreviewProvider>
       ) : (
-        <Component {...pageProps} />
+        <div className="bg-zinc-900 text-white h-full">
+          {!isSanityStudio && <Navbar />}
+          <Component {...pageProps} />
+          {!isSanityStudio && <Footer />}
+        </div>
       )}
     </>
   )
