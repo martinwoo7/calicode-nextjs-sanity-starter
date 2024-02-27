@@ -11,7 +11,7 @@ const PostHeader = ({ title, coverImage, date, author }) => {
         {author && <Avatar name={author.name} picture={author.picture} />}
       </div>
       <div className="mb-8 md:mb-16 sm:mx-0">
-        <CoverImage title={title} image={coverImage} priority />
+        <CoverImage slug={null} title={title} image={coverImage} priority />
       </div>
       <div className="max-w-2xl mx-auto">
         <div className="block mb-6 md:hidden">

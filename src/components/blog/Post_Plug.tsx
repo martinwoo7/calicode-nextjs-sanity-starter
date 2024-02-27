@@ -8,7 +8,7 @@ const PostPlug = ({ title, coverImage, date, excerpt, slug, author }) => {
   return (
     <div>
       <div className="mb-5">
-        <CoverImage slug={slug} title={title} image={coverImage} />
+        <CoverImage slug={slug} title={title} image={coverImage} priority/>
       </div>
       <h3 className="mb-3 text-3xl leading-snug">
         <Link href={`/post/${slug}`} className="hover:underline">
