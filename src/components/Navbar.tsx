@@ -21,7 +21,7 @@ export default function Navbar() {
             </li>
             <li>
               <Link
-                href="/projects"
+                href="/project"
                 className="hover:text-purple-400 duration-300"
               >
                 Projects

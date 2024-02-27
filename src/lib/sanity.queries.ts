@@ -3,10 +3,54 @@ import type { ImageAsset, Slug, FileAsset } from '@sanity/types'
 import groq from 'groq'
 import { type SanityClient } from 'next-sanity'
 
+export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]`
+
+export const postSlugsQuery = groq`*[_type == "post" && defined(slug.current)][].slug.current`
+
+export const projectSlugsQuery = groq`*[_type == "project" && defined(slug.current)][].slug.current`
+
+export const projectQuery = groq`*[_type == "project"]{
+  _id, 
+  name,
+  "slug": slug.current,
+  tagline,
+  "logo": logo.asset->url,
+}`
+export async function getProject(client: SanityClient): Promise<Project[]> {
+  return await client.fetch(projectQuery)
+}
+
+export const projectBySlugQuery = groq`*[_type == "project" && slug.current == $slug][0]{
+  _id,
+  name,
+  projectUrl,
+  coverImage { alt, "image": asset->url },
+  tagline,
+  description
+}`
+
+export async function getSingleProject(
+  client: SanityClient,
+  slug: string,
+): Promise<Project> {
+  return await client.fetch(projectBySlugQuery, {
+    slug,
+  })
+}
+
 export const postsQuery = groq`*[_type == "post" && defined(slug.current)] | order(_createdAt desc)`
 
 export async function getPosts(client: SanityClient): Promise<Post[]> {
   return await client.fetch(postsQuery)
+}
+
+export async function getPost(
+  client: SanityClient,
+  slug: string,
+): Promise<Post> {
+  return await client.fetch(postBySlugQuery, {
+    slug,
+  })
 }
 
 export const jobQuery = groq`*[_type == "job"]{
@@ -24,17 +68,6 @@ export async function getJob(client: SanityClient): Promise<Job[]> {
   return await client.fetch(jobQuery)
 }
 
-export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]`
-
-export async function getPost(
-  client: SanityClient,
-  slug: string,
-): Promise<Post> {
-  return await client.fetch(postBySlugQuery, {
-    slug,
-  })
-}
-
 export const profileQuery = groq`*[_type == "profile"]{
   _id,
   fullName,
@@ -48,13 +81,24 @@ export const profileQuery = groq`*[_type == "profile"]{
   socialLinks,
   skills
 }`
+
 export async function getProfile(client: SanityClient): Promise<Profile[]> {
   return await client.fetch(profileQuery)
 }
 
-export const postSlugsQuery = groq`
-*[_type == "post" && defined(slug.current)][].slug.current
-`
+export interface Project {
+  _id: string
+  name: string
+  slug: Slug
+  tagline: string
+  projectUrl: string
+  logo: string
+  coverImage: {
+    alt: string | null
+    image: string
+  }
+  description: PortableTextBlock[]
+}
 
 export interface Job {
   _id: string

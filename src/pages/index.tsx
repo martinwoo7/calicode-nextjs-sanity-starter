@@ -4,22 +4,15 @@ import { useLiveQuery } from 'next-sanity/preview'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import {
-  getPosts,
-  type Post,
-  postsQuery,
   getProfile,
   type Profile,
   profileQuery,
   type Job,
   getJob,
-  jobQuery,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
 import JobComponent from '~/components/Job'
 
-import Container from '~/components/Container'
-import Welcome from '~/components/Welcome'
-import Card from '~/components/Card'
 import HeroSvg from '~/icons/HeroSvg'
 
 export const getStaticProps: GetStaticProps<
@@ -42,31 +35,10 @@ export const getStaticProps: GetStaticProps<
   }
 }
 
-// export const getStaticJobProps: GetStaticProps<
-//   SharedPageProps & {
-//     job: Job[]
-//   }
-// > = async ({ draftMode = false }) => {
-//   const client = getClient(draftMode ? { token: readToken } : undefined)
-
-//   const job = await getJob(client)
-
-//   return {
-//     props: {
-//       draftMode,
-//       token: draftMode ? readToken : '',
-//       job,
-//     },
-//   }
-// }
-
 export default function IndexPage(
   props: InferGetStaticPropsType<typeof getStaticProps>,
-  // jobProps: InferGetStaticPropsType<typeof getStaticJobProps>,
 ) {
   const [profile] = useLiveQuery<Profile[]>(props.profile, profileQuery)
-  console.log(props.job)
-  // const [job] = useLiveQuery<Job[]>(jobProps.job, jobQuery)
 
   return (
     <main className="max-w-7xl mx-auto lg:px-16 px-6">
