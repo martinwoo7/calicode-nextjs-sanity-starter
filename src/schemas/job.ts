@@ -1,8 +1,9 @@
 import { BiBriefcase } from 'react-icons/bi'
+import { defineType } from 'sanity'
 
-const jobs = {
-  name: 'jobs',
-  title: 'jobs',
+export default defineType({
+  name: 'job',
+  title: 'Job',
   type: 'document',
   icon: BiBriefcase,
   fields: [
@@ -46,6 +47,4 @@ const jobs = {
       type: 'date',
     },
   ],
-}
-
-export default jobs
+})

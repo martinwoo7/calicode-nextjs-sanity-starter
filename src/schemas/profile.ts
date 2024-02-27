@@ -1,7 +1,7 @@
-import { defineField } from 'sanity'
+import { defineField, defineType } from 'sanity'
 import { BiUser } from 'react-icons/bi'
 
-const profile = {
+export default defineType({
   name: 'profile',
   title: 'Profile',
   type: 'document',
@@ -106,6 +106,4 @@ const profile = {
       of: [{ type: 'string' }],
     },
   ],
-}
-
-export default profile
+})

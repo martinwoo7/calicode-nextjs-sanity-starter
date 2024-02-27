@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getJobs, jobsQuery, type Job } from '~/lib/sanity.queries'
+import { getJob, jobQuery, type Job } from '~/lib/sanity.queries'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
 import type { GetStaticProps } from 'next'
@@ -8,32 +8,28 @@ import type { SharedPageProps } from '~/pages/_app'
 import { useLiveQuery } from 'next-sanity/preview'
 import { InferGetStaticPropsType } from 'next'
 
-// import { getStaticProps } from '~/pages'
+export const getStaticJobProps: GetStaticProps<
+  SharedPageProps & {
+    job: Job[]
+  }
+> = async ({ draftMode = false }) => {
+  const client = getClient(draftMode ? { token: readToken } : undefined)
 
-// export const getStaticProps: GetStaticProps<
-//   SharedPageProps & {
-//     job: Job[]
-//   }
-// > = async ({ draftMode = false }) => {
-//   const client = getClient(draftMode ? { token: readToken } : undefined)
+  const job = await getJob(client)
 
-//   const job = await getJobs(client)
+  return {
+    props: {
+      draftMode,
+      token: draftMode ? readToken : '',
+      job,
+    },
+  }
+}
 
-//   return {
-//     props: {
-//       draftMode,
-//       token: draftMode ? readToken : '',
-//       job,
-//     },
-//   }
-// }
-
-export default async function JobComponent(
-  //   props: InferGetStaticPropsType<typeof getStaticProps>,
-  jobs,
-) {
-  //   const [job] = useLiveQuery<Job[]>(props.job, jobsQuery)
-  console.log(jobs)
+const JobComponent = (
+  props: InferGetStaticPropsType<typeof getStaticJobProps>,
+) => {
+  const [job] = useLiveQuery<Job[]>(props.job, jobQuery)
 
   return (
     <section className="mt-32">
@@ -42,7 +38,7 @@ export default async function JobComponent(
       </div>
 
       <div className="flex flex-col gap-y-12">
-        {jobs.map((data) => (
+        {job.map((data) => (
           <div
             key={data._id}
             className="flex items-start lg:gap-x-6 gap-x-4 max-w-2xl relative before:absolute before:bottom-0 before:top-[4.5rem] before:left-7 before:w-[1px] before:h-[calc(100%-50px)] before:bg-zinc-800"
@@ -73,3 +69,4 @@ export default async function JobComponent(
     </section>
   )
 }
+export default JobComponent

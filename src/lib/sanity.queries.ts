@@ -9,6 +9,21 @@ export async function getPosts(client: SanityClient): Promise<Post[]> {
   return await client.fetch(postsQuery)
 }
 
+export const jobQuery = groq`*[_type == "job"]{
+  _id,
+  name,
+  jobTitle,
+  "logo": logo.asset->url,
+  url,
+  description,
+  startDate,
+  endDate,
+}`
+
+export async function getJob(client: SanityClient): Promise<Job[]> {
+  return await client.fetch(jobQuery)
+}
+
 export const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0]`
 
 export async function getPost(
@@ -40,20 +55,6 @@ export async function getProfile(client: SanityClient): Promise<Profile[]> {
 export const postSlugsQuery = groq`
 *[_type == "post" && defined(slug.current)][].slug.current
 `
-
-export const jobsQuery = groq`*[_type == "job"]{
-  _id,
-  name,
-  jobTitle,
-  "logo": logo.asset->url,
-  url,
-  description,
-  startDate,
-  endDate,
-}`
-export async function getJobs(client: SanityClient): Promise<Job[]> {
-  return await client.fetch(jobsQuery)
-}
 
 export interface Job {
   _id: string
