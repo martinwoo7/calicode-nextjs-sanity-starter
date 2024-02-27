@@ -1,20 +1,19 @@
-import { PortableText } from '@portabletext/react'
 import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import Image from 'next/image'
 import { useLiveQuery } from 'next-sanity/preview'
-
-import Container from '~/components/Container'
 import { readToken } from '~/lib/sanity.api'
 import { getClient } from '~/lib/sanity.client'
-import { urlForImage } from '~/lib/sanity.image'
 import {
+  getPosts,
   getPost,
   type Post,
   postBySlugQuery,
   postSlugsQuery,
+  postsQuery,
+  getOtherPost,
 } from '~/lib/sanity.queries'
 import type { SharedPageProps } from '~/pages/_app'
-import { formatDate } from '~/utils'
+
+import PostPage from '~/components/blog/Post'
 
 interface Query {
   [key: string]: string
@@ -23,11 +22,14 @@ interface Query {
 export const getStaticProps: GetStaticProps<
   SharedPageProps & {
     post: Post
+    otherPosts: Post[]
   },
   Query
 > = async ({ draftMode = false, params = {} }) => {
   const client = getClient(draftMode ? { token: readToken } : undefined)
+
   const post = await getPost(client, params.slug)
+  const otherPosts = await getOtherPost(client, params.slug)
 
   if (!post) {
     return {
@@ -40,6 +42,7 @@ export const getStaticProps: GetStaticProps<
       draftMode,
       token: draftMode ? readToken : '',
       post,
+      otherPosts,
     },
   }
 }
@@ -51,31 +54,13 @@ export default function ProjectSlugRoute(
     slug: props.post.slug.current,
   })
 
-  return (
-    <Container>
-      <section className="post">
-        {post.mainImage ? (
-          <Image
-            className="post__cover"
-            src={urlForImage(post.mainImage).url()}
-            height={231}
-            width={367}
-            alt=""
-          />
-        ) : (
-          <div className="post__cover--none" />
-        )}
-        <div className="post__container">
-          <h1 className="post__title">{post.title}</h1>
-          <p className="post__excerpt">{post.excerpt}</p>
-          <p className="post__date">{formatDate(post._createdAt)}</p>
-          <div className="post__content">
-            <PortableText value={post.body} />
-          </div>
-        </div>
-      </section>
-    </Container>
-  )
+  const data = { post: post, morePosts: props.otherPosts }
+  return <PostPage data={data} />
+  // return (
+  //   <div>
+  //     <h1>Hello</h1>
+  //   </div>
+  // )
 }
 
 export const getStaticPaths = async () => {

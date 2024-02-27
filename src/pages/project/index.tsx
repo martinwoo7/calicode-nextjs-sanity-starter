@@ -32,7 +32,7 @@ export default function Project(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
   const [project] = useLiveQuery<Project[]>(props.project, projectQuery)
-  console.log(project)
+  // console.log(project)
 
   return (
     <main className="max-w-7xl mx-auto md:px-16 px-6">
