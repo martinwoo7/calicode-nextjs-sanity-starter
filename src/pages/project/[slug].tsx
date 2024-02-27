@@ -41,25 +41,6 @@ export const getStaticProps: GetStaticProps<
   }
 }
 
-// Dynamic metadata for SEO
-export async function generateMetadata(
-  props: InferGetStaticPropsType<typeof getStaticProps>,
-) {
-  const [project] = useLiveQuery(props.project, projectBySlugQuery, {
-    slug: props.project.slug,
-  })
-
-  return {
-    title: `${project.name} | Project`,
-    description: project.tagline,
-    openGraph: {
-      images: project.coverImage?.image || 'add-a-fallback-project-image-here',
-      title: project.name,
-      description: project.tagline,
-    },
-  }
-}
-
 export default function ProjectSlugRoute(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
