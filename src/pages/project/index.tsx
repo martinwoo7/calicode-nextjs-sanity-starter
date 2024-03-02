@@ -32,7 +32,6 @@ export default function Project(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
   const [project] = useLiveQuery<Project[]>(props.project, projectQuery)
-  // console.log(project)
 
   return (
     <main className="max-w-7xl mx-auto md:px-16 px-6">
@@ -54,7 +53,7 @@ export default function Project(
           // console.log(proj.slug)
           return (
             <Link
-              href={`/project/${proj.slug}`}
+              href={`/project/${proj.slug.current}`}
               key={proj._id}
               className="flex items-center gap-x-4 bg-[#1d1d20] border border-transparent hover:border-zinc-700 p-4 rounded-lg ease-in-out"
             >

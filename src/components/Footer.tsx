@@ -8,7 +8,7 @@ export default function Footer() {
 
         <small className="hover:text-white duration-200">
           <a
-            href="https://github.com/Evavic44/sanity-nextjs-site"
+            href="https://calicode-nextjs-sanity-starter-git-main-martinwoo7s-projects.vercel.app/"
             target="_blank"
             rel="noreferrer noopener"
           >

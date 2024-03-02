@@ -32,7 +32,7 @@ export default function About(
   props: InferGetStaticPropsType<typeof getStaticProps>,
 ) {
   const [profile] = useLiveQuery<Profile[]>(props.profile, profileQuery)
-  console.log(profile)
+
   return (
     <main className="lg:max-w-7xl mx-auto max-w-3xl md:px-16 px-6 h-full">
       {profile &&
@@ -58,6 +58,7 @@ export default function About(
                     height={400}
                     quality={100}
                     alt={data.profileImage.alt}
+                    priority
                   />
 
                   <a

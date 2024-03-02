@@ -13,7 +13,7 @@ import { type Post } from '~/lib/sanity.queries'
 
 export default function PostPage({ data }) {
   const router = useRouter()
-  console.log(data)
+
   const { post, morePosts } = data
 
   const slug = post?.slug

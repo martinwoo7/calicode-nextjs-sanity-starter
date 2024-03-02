@@ -4,8 +4,13 @@ import type { AppProps } from 'next/app'
 import { IBM_Plex_Mono, Inter, PT_Serif } from 'next/font/google'
 import { lazy, useEffect, useState } from 'react'
 
+// Navigational Bars
 import Navbar from '~/components/Navbar'
+import NavbarCenter from '~/components/navigation/Navbar_Center'
+
+// Footers
 import Footer from '~/components/Footer'
+
 import type { Metadata } from 'next'
 
 export interface SharedPageProps {
@@ -76,7 +81,8 @@ export default function App({
         </PreviewProvider>
       ) : (
         <div className="bg-zinc-900 text-white h-full">
-          {!isSanityStudio && <Navbar />}
+          {/* {!isSanityStudio && <Navbar />} */}
+          {!isSanityStudio && <NavbarCenter />}
           <Component {...pageProps} />
           {!isSanityStudio && <Footer />}
         </div>
